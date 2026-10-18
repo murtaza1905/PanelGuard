@@ -16,24 +16,28 @@ if ! xcrun -f swiftc >/dev/null 2>&1; then
     exit 1
 fi
 
-ARCH="$(uname -m)"
 VERSION="$(cat VERSION)"
 APP="build/PanelGuard.app"
 MACOS_DIR="$APP/Contents/MacOS"
 RES_DIR="$APP/Contents/Resources"
 
-echo "==> Building PanelGuard $VERSION ($ARCH)"
+echo "==> Building PanelGuard $VERSION (universal: x86_64 + arm64)"
 rm -rf build
-mkdir -p "$MACOS_DIR" "$RES_DIR"
+mkdir -p "$MACOS_DIR" "$RES_DIR" build/obj
 
-xcrun swiftc \
-    -O \
-    -target "${ARCH}-apple-macos12.0" \
-    -framework AppKit \
-    -framework CoreGraphics \
-    -module-name PanelGuard \
-    -o "$MACOS_DIR/PanelGuard" \
-    Sources/PanelGuard/*.swift
+for ARCH in x86_64 arm64; do
+    xcrun swiftc \
+        -O \
+        -target "${ARCH}-apple-macos12.0" \
+        -framework AppKit \
+        -framework CoreGraphics \
+        -module-name PanelGuard \
+        -o "build/obj/PanelGuard-$ARCH" \
+        Sources/PanelGuard/*.swift
+done
+
+lipo -create build/obj/PanelGuard-x86_64 build/obj/PanelGuard-arm64 -output "$MACOS_DIR/PanelGuard"
+rm -rf build/obj
 
 echo "==> Adding icons"
 cp Resources/MenuBarIcon.png Resources/MenuBarIcon@2x.png "$RES_DIR/"

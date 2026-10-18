@@ -20,10 +20,11 @@ Image retention on IPS panels is a physical, temperature‑related effect. Softw
 - macOS 12 Monterey or newer
 - Intel or Apple Silicon
 - Xcode (only to build from source; the prebuilt release needs nothing)
+- Builds are universal: one app runs natively on Intel and Apple Silicon
 
 ## Download
 
-Prebuilt app: **[Releases](https://github.com/murtaza1905/PanelGuard/releases/latest)** → `PanelGuard-<version>.zip`. Unzip, drag `PanelGuard.app` to Applications, then right‑click → Open on first launch (the app is self‑signed). If macOS reports it as damaged:
+Prebuilt universal (Intel + Apple Silicon) disk image: **[Releases](https://github.com/murtaza1905/PanelGuard/releases/latest)** → `PanelGuard-<version>.dmg`. Open it, drag `PanelGuard.app` to Applications, then right‑click → Open on first launch (the app is self‑signed). If macOS reports it as damaged:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/PanelGuard.app
@@ -37,7 +38,7 @@ cd PanelGuard
 ./scripts/build.sh
 ```
 
-The script compiles with the Swift compiler bundled in Xcode, installs to `/Applications` and launches the app. No Homebrew or other tooling is required. `./scripts/package.sh` additionally produces `build/PanelGuard-<version>.zip` for distribution.
+The script compiles a universal binary (Intel + Apple Silicon) with the Swift compiler bundled in Xcode, installs to `/Applications` and launches the app. No Homebrew or other tooling is required. `./scripts/make-dmg.sh` additionally produces `build/PanelGuard-<version>.dmg` for distribution.
 
 ## Usage
 
