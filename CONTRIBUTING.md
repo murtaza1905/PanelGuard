@@ -43,7 +43,7 @@ There is no Xcode project; the app is a handful of Swift files under `Sources/Pa
 
 ## Release process (maintainers)
 
-1. Bump the version (`VERSION` and `BUILD`) and move the **Unreleased** notes in `CHANGELOG.md` under the new version heading.
+1. Bump the version (`VERSION` and `BUILD_NUMBER`) and move the **Unreleased** notes in `CHANGELOG.md` under the new version heading.
 2. Commit, push to `main` and wait for CI to pass.
 3. Tag the commit and push the tag:
 

@@ -97,7 +97,7 @@ Sources/PanelGuard/        AppKit app: AppDelegate, GammaFilter, IdleMonitor, Se
 Resources/                 Info.plist, PrivacyInfo.xcprivacy, app icon set, menu bar icon
 scripts/                   build.sh · install.sh · make-dmg.sh · uninstall.sh
 .github/workflows/         ci.yml (build check) · release.yml (tag → DMG + ZIP + checksums → GitHub Release)
-VERSION, BUILD             Marketing version and build number stamped into Info.plist
+VERSION, BUILD_NUMBER      Marketing version and build number stamped into Info.plist
 docs/                      README assets
 ```
 

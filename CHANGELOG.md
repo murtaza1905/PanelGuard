@@ -17,7 +17,7 @@ All notable changes to PanelGuard are documented here. The format follows [Keep 
 - Bundle identifier is now `com.muratonurcu.PanelGuard` (was `com.panelguard.app`). Existing settings are migrated automatically on first launch. If PanelGuard was added to Login Items, re-add it once.
 - `scripts/build.sh` now only builds `build/PanelGuard.app`; installing and launching moved to `scripts/install.sh`.
 - `scripts/make-dmg.sh` writes to `dist/`, lays out the disk image window (app icon → Applications) and sets the volume icon.
-- Build number (`BUILD` file) is now stamped into `CFBundleVersion` and increases with every release.
+- Build number (`BUILD_NUMBER` file) is now stamped into `CFBundleVersion` and increases with every release.
 - Application category, copyright string and README updated.
 
 ## [1.0.2] - 2026-10-18

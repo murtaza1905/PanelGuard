@@ -20,7 +20,7 @@ if ! xcrun -f swiftc >/dev/null 2>&1; then
 fi
 
 VERSION="$(tr -d '[:space:]' < VERSION)"
-BUILD_NUMBER="$(tr -d '[:space:]' < BUILD)"
+BUILD_NUMBER="$(tr -d '[:space:]' < BUILD_NUMBER)"
 APP="build/PanelGuard.app"
 MACOS_DIR="$APP/Contents/MacOS"
 RES_DIR="$APP/Contents/Resources"
