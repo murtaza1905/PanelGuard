@@ -19,5 +19,16 @@ enum L10n {
     static var idleSleep: String { t("Sleep Display When Idle", "Boşta Ekranı Uyut") }
     static var duration: String { t("Delay", "Süre") }
     static func minutes(_ m: Int) -> String { t("\(m) minutes", "\(m) dakika") }
+    static var about: String { t("About PanelGuard…", "PanelGuard Hakkında…") }
     static var quit: String { t("Quit", "Çıkış") }
+
+    // About window
+    static var aboutTagline: String {
+        t("Reduces image retention on IPS displays.", "IPS ekranlarda görüntü tutulmasını azaltır.")
+    }
+    static var aboutDeveloper: String { t("Developer", "Geliştirici") }
+    static var aboutSource: String { t("Source code and issues on GitHub", "Kaynak kod ve hata bildirimi: GitHub") }
+    static var aboutLicense: String {
+        t("Open source under the MIT License.", "MIT Lisansı ile açık kaynak.")
+    }
 }

@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let idleOptions = [2, 3, 5, 10]
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        Settings.migrateLegacyDefaultsIfNeeded()
         setupStatusItem()
         setupIdleMonitor()
         applyFilterSetting()
@@ -83,6 +84,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         menu.addItem(.separator())
 
+        let about = NSMenuItem(title: L10n.about, action: #selector(showAbout), keyEquivalent: "")
+        about.target = self
+        menu.addItem(about)
+
         let quit = NSMenuItem(title: L10n.quit, action: #selector(quitApp), keyEquivalent: "q")
         quit.target = self
         menu.addItem(quit)
@@ -109,6 +114,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc private func selectMinutes(_ sender: NSMenuItem) {
         Settings.idleMinutes = sender.tag
         applyIdleSetting()
+    }
+
+    @objc private func showAbout() {
+        AboutPanel.show()
     }
 
     @objc private func quitApp() {

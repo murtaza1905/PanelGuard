@@ -1,6 +1,9 @@
 #!/bin/bash
-# Builds PanelGuard with the Swift compiler bundled in Xcode, installs it to
-# /Applications and launches it. No Homebrew, XcodeGen or other tooling needed.
+# Builds PanelGuard as a universal (x86_64 + arm64) app bundle with the Swift
+# compiler bundled in Xcode. No Homebrew, XcodeGen or other tooling is needed.
+#
+# Output: build/PanelGuard.app (ad-hoc signed)
+# To install and launch the result, run ./scripts/install.sh instead.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -16,13 +19,14 @@ if ! xcrun -f swiftc >/dev/null 2>&1; then
     exit 1
 fi
 
-VERSION="$(cat VERSION)"
+VERSION="$(tr -d '[:space:]' < VERSION)"
+BUILD_NUMBER="$(tr -d '[:space:]' < BUILD)"
 APP="build/PanelGuard.app"
 MACOS_DIR="$APP/Contents/MacOS"
 RES_DIR="$APP/Contents/Resources"
 
-echo "==> Building PanelGuard $VERSION (universal: x86_64 + arm64)"
-rm -rf build
+echo "==> Building PanelGuard $VERSION ($BUILD_NUMBER) — universal: x86_64 + arm64"
+rm -rf "$APP" build/obj
 mkdir -p "$MACOS_DIR" "$RES_DIR" build/obj
 
 for ARCH in x86_64 arm64; do
@@ -39,38 +43,20 @@ done
 lipo -create build/obj/PanelGuard-x86_64 build/obj/PanelGuard-arm64 -output "$MACOS_DIR/PanelGuard"
 rm -rf build/obj
 
-echo "==> Adding icons"
-cp Resources/MenuBarIcon.png Resources/MenuBarIcon@2x.png "$RES_DIR/"
+echo "==> Adding resources"
+cp Resources/MenuBarIcon.png Resources/MenuBarIcon@2x.png Resources/PrivacyInfo.xcprivacy "$RES_DIR/"
 if command -v iconutil >/dev/null 2>&1; then
     iconutil -c icns Resources/AppIcon.iconset -o "$RES_DIR/AppIcon.icns"
 else
     echo "iconutil not found; skipping app icon." >&2
 fi
 
-sed "s/__VERSION__/$VERSION/g" Resources/Info.plist > "$APP/Contents/Info.plist"
+sed -e "s/__VERSION__/$VERSION/g" -e "s/__BUILD__/$BUILD_NUMBER/g" Resources/Info.plist > "$APP/Contents/Info.plist"
 echo "APPL????" > "$APP/Contents/PkgInfo"
 
 echo "==> Signing (ad-hoc)"
-codesign --force --sign - "$APP" >/dev/null 2>&1 || true
+codesign --force --sign - "$APP"
 
-echo "==> Installing to /Applications"
-if [ -d /Applications/PanelGuard.app ]; then
-    osascript -e 'quit app "PanelGuard"' >/dev/null 2>&1 || true
-    sleep 1
-    rm -rf /Applications/PanelGuard.app
-fi
-cp -R "$APP" /Applications/PanelGuard.app
-touch /Applications/PanelGuard.app
-xattr -dr com.apple.quarantine /Applications/PanelGuard.app 2>/dev/null || true
-
-echo "==> Launching"
-open /Applications/PanelGuard.app
-
-cat <<'EOF'
-
-PanelGuard is running in the menu bar.
-Menu: White Softening Filter · Intensity · Sleep Display When Idle · Delay · Quit
-
-To launch at login:
-  System Settings → General → Login Items → + → /Applications/PanelGuard.app
-EOF
+echo
+echo "Built: $APP"
+lipo -archs "$MACOS_DIR/PanelGuard"

@@ -1,2 +1,7 @@
+# Build products
 build/
+dist/
+
+# macOS
 .DS_Store
+._*
